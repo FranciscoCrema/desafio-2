@@ -10,13 +10,21 @@ class ProductManager {
     this.path = `./product.json`;
   }
 
+  async createFile() {
+    try {
+      await fs.readFile(this.path, "utf-8");
+      return "Leyendo archivo";
+    } catch (error) {
+      await fs.writeFile(this.path, "[]");
+      return "Creando Archivo";
+    }
+  }
+
   async getProducts() {
     try {
       const productFile = await fs.readFile(this.path, "utf-8");
       return JSON.parse(productFile);
     } catch (e) {
-      await fs.writeFile(this.path, "[]");
-
       return "No hay archivo";
     }
   }
@@ -136,6 +144,7 @@ const producto3 = {
 const producM = new ProductManager();
 
 const main = async () => {
+  console.log(await producM.createFile());
   console.log(await producM.addProducts(producto1));
   console.log(await producM.addProducts(producto2));
   console.log(await producM.addProducts(producto3));
